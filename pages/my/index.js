@@ -19,26 +19,65 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    let that = this;
     let userInfo = wx.getStorageSync('userInfo')
     if (!userInfo) {
-      app.goLoginPageTimeOut();
+      app.goLoginPageTimeout()
     } else {
-      this.setData({
+      that.setData({
         userInfo: userInfo,
         version: CONFIG.version,
         vipLevel: app.globalData.vipLevel
       })
     }
+    that.getUserDetail()
+    that.getUserAmount()
   },
+  // 用户详情
+  getUserDetail: function() {
+    var that = this
+    WXAPI.userDetail(wx.getStorageInfoSync('token')).then(function(res) {
 
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
+      if (res.code == 0) {
+        let _data = {}
+        _data.userDetail = res.data
+        if (res.data.base.mobile) {
+          _data.userMobile = res.data.base.mobile
+        }
+        that.setData(_data)
+      }
+    })
   },
+  // 用户资产
+  getUserAmount: function() {
+    var that = this
+    WXAPI.userAmount(wx.getStorageInfoSync('token')).then(function(res) {
 
+      if (res.code == 0) {
+        this.setData({
+          balance: res.data.balance.toFixed(2),
+          freeze: res.data.freeze.toFixed(2),
+          score: res.data.score
+        })
+      }
+    })
+  },
   relogin: function () {
-    app.goLoginPageTimeOut();
+    app.goLoginPageTimeout()
   },
+  goAsset: function () {
+    wx.navigateTo({
+      url: "/pages/asset/index"
+    })
+  },
+  goScore: function () {
+    wx.navigateTo({
+      url: "/pages/score/index"
+    })
+  },
+  goOrder: function (e) {
+    wx.navigateTo({
+      url: "/pages/order-list/index?type=" + e.currentTarget.dataset.type
+    })
+  }
 })

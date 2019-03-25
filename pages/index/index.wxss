@@ -1,21 +1,77 @@
 /**index.wxss**/
-.userinfo {
+.container {
+  background-color: #fff;
+  min-height: 100%;
+  display: block;
+}
+/*banner*/
+.swiper-container {
+  position: relative;
+}
+.swiper {
+  height: 300rpx;
+}
+swiper-item image {
+  width: 100%;
+  height: 100%;
+}
+.swiper-container .dots {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 20rpx;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: center;
 }
-
-.userinfo-avatar {
-  width: 128rpx;
-  height: 128rpx;
-  margin: 20rpx;
+.swiper-container .dots .dot {
+  margin: 0 8rpx;
+  width: 14rpx;
+  height: 14rpx;
+  background-color: #fff;
   border-radius: 50%;
+  transition: all .6s;
+  opacity: .5;
+}
+.swiper-container .dots .dot.active {
+  width: 14rpx;
+  opacity: 1;
+}
+/*category*/
+.category-box {
+  background-color: #fff;
+  clear: both;
+}
+.category-list {
+  width: 150rpx;
+  margin-top: 20rpx;
+  text-align: center;
+  display: inline-block;
+  overflow: hidden;
+}
+category-colunm {
+  width: 100%;
+  margin-top: 20rpx;
+  overflow: hidden;
+}
+.category-img {
+  width: 60rpx;
+  height: 60rpx;
+  margin-top: 10rpx;
+}
+.category-title {
+  font-size: 24rpx;
+  text-align: center;
+}
+.type-item-on{
+  color:#e64340;
+  border-bottom: 1rpx solid #e64340;
 }
 
-.userinfo-nickname {
-  color: #aaa;
-}
 
-.usermotto {
-  margin-top: 200px;
+
+.weui-loadmore {
+  margin-bottom: 0px;
+}
+.goods-container {
+
 }

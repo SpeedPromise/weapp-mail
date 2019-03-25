@@ -2,12 +2,13 @@ const WXAPI = require('wxapi/main')
 App({
   navigateToLogin: false,
   onLaunch: function () {
+    const that = this
     // 判断网络情况
     wx.getNetworkType({
       success: function(res) {
         const networkType = res.networkType;
         if (networkType === 'none') {
-          this.globalData.isConnected = false;
+          that.globalData.isConnected = false
           wx.showToast({
             title: '无网络连接',
             icon: 'loading',
@@ -20,65 +21,67 @@ App({
     // 监听网络状态
     wx.onNetworkStatusChange(function(res){
       if (!res.isConnected) {
-        this.globalData.isConnected = false;
+        that.globalData.isConnected = false
         wx.showToast({
           title: '网络已断开',
           icon: 'loading',
           duration: 1500,
           complete: function() {
-            this.goStartIndexPage();
+            that.goStartIndexPage()
           }
         })
       } else {
-        this.globalData.isConnected = true;
+        that.globalData.isConnected = true
         wx.hideToast()
       }
     });
     // 获取接口和后台权限
     WXAPI.vipLevel().then(res => {
-      this.globalData.vipLevel = res.data;
+      that.globalData.vipLevel = res.data
     });
     // 获取商城名称
     WXAPI.queryConfig({
       key: 'mailName'
     }).then(function(res) {
       if (res.code == 0) {
-        wx.setStorageSync('maelName', res.data.value);
+        wx.setStorageSync('mailName', res.data.value)
       }
     });
     // 获取积分
     WXAPI.scoreRules({
       code: 'goodReputation'
     }).then(function(res) {
-      this.globalData.order_reputation_score = res.data[0].score;
+      if (res.code == 0) {
+        that.globalData.order_reputation_score = res.data[0].score
+      }
     });
     // 获取充值的最低金额
     WXAPI.queryConfig({
       key: 'recharge_amount_min'
     }).then(function (res) {
       if (res.code == 0) {
-        this.globalData.recharge_amount_min = res.data.value;
+        that.globalData.recharge_amount_min = res.data.value;
       }
     });
     // 登录判断
-    let token = wx.getStorageInfoSync('token');
-    if (!token) {
-      this.goLoginPageTimeout()
-      return
-    }
-    WXAPI.checkToken(token).then(function(res) {
-      if (res.code != 0) {
-        wx.removeStorageSync('token')
-        this.goLoginPageTimeout()
-      }
-    }) 
+    // let token = wx.getStorageInfoSync('token')
+    // if (!token) {
+    //   that.goLoginPageTimeout()
+    //   return
+    // }
+    // WXAPI.checkToken(token).then(function(res) {
+    //   if (res.code != 0) {
+    //     wx.removeStorageSync('token')
+    //     that.goLoginPageTimeout()
+    //   }
+    // }) 
   },
   goLoginPageTimeout: function () {
     if (this.navigateToLogin) {
       return
     }
-    wx.removeStorageSync('token');
-    this.navigateToLogin = true;
+    wx.removeStorageSync('token')
+    this.navigateToLogin = true
     setTimeout(function () {
       wx.navigateTo({
         url: '/pages/authorize/index',

@@ -1,13 +1,58 @@
 <!--index.wxml-->
 <view class="container">
-  <view class="userinfo">
-    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
-    <block wx:else>
-      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
-    </block>
+  <view class='weui-search-bar'>
+    <view class='weui-search-bar__form'>
+      <view class='weui-search-bar__box'>
+        <icon class='weui-icon-search_in-box' type='search' size='14'></icon>
+        <input type='text' class='weui-search-bar__input' placeholder='搜索' value='{{inputVal}}' focus='{{inputShowed}}' bindinput='inputTyping' confirm-type='search' bindconfirm='toSearch'></input>
+        <view class="weui-icon-clear" wx:if="{{inputVal.length > 0}}" bindtap="clearInput">
+          <icon type="clear" size="14"></icon>
+        </view>
+      </view>
+      <label class='weui-search-bar__label' hidden='{{inputShowed}}' bindtap='showInput'>
+        <icon class='weui-icon-search' type='search' size='14'></icon>
+        <view class='weui-search-bar__text'> 搜索</view>
+      </label>
+    </view>
+    <view class='weui-search-bar__cancel-btn' hidden='{{!inputShowed}}' bindtap='hideInput'>取消</view>
   </view>
-  <view class="usermotto">
-    <text class="user-motto">{{motto}}</text>
+
+  <view class='swiper-container'>
+    <swiper class='swiper' indicator-dots="true" autoplay="true" interval="{{interval}}" duration="{{duration}}" bindchange='swiperChange'>
+      <block wx:for="{{banners}}" wx:key="unique">
+        <swiper-item>
+          <image bindtap="tapBanner" data-id="{{item.businessId}}" src="{{item.picUrl}}" class="slide-iamge">
+          </image>
+        </swiper-item>
+      </block>
+    </swiper>
+    <view class='dots'>
+      <block wx:for="{{banners}}" wx:key="unique">
+        <view class="dot{{index == swiperCurrent ? ' active' : ''}}">
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <scroll-view scroll-x>
+    <view class='category-box' style='width: {{category_box_width}}rpx;'>
+      <view class='category-list' wx:for="{{categories}}" wx:if="{{index%2===0}}" wx:key="unique">
+        <view class="category-colunm {{activeCategoryId==categories[index].id ? 'type-item-on' : ''}}" bindtap='tabClick' id="{{categories[index].id}}">
+          <image class='category-img' src="{{categories[index].icon}}"></image>
+          <view class='category-title'>{{categories[index].name}}</view>
+        </view>
+        <view class="category-colunm {{activeCategoryId==categories[index+1].id ? 'type-item-on' : ''}}" bindtap='tabClick' id="{{categories[index+1].id}}">
+          <image class='category-img' src="{{categories[index+1].icon}}"></image>
+          <view class='category-title'>{{categories[index+1].name}}</view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <view class="weui-loadmore weui-loadmore_line" wx:if="{{goodRecommand.length > 0 && activeCategoryId == 0}}">
+    <view class='weui-loadmore__tips weui-loadmore__tip_in-line'>精选商品</view>
+  </view>
+  <view class='goods-container' wx:if="{{goodRecommand.length > 0 && activeCategoryId == 0}}">
+    <view></view>
   </view>
 </view>

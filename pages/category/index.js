@@ -1,4 +1,4 @@
-// pages/shopping-art/index.js
+// pages/category/index.js
 Page({
 
   /**
