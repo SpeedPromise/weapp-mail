@@ -9,11 +9,11 @@ Page({
     inputShowed: false, // 是否显示搜索框
     inputVal: '', //搜索内容
 
-    categories: [],
-    goodsRecommend: [],
-    goodsNew: [],
-    goodsSeason: [],
-    goodsHot: [],
+    categories: [], 
+    goodsRecommend: [], // 精选
+    goodsNew: [],  // 新品
+    goodsSeason: [], // 当季
+    goodsHot: [], // 热销
 
     interval: 3500,
     duration: 1000,
@@ -21,6 +21,10 @@ Page({
     swiperCurrent: 0,
     activeCategoryId: 0,
     category_width: 750,
+    
+    curPage: 1,
+    pageSize: 20,
+    cateScrollTop: 0,
 
   },
   onLoad: function(e) {
@@ -87,11 +91,26 @@ Page({
     })
 
   },
-
+  // 商品列表
   getGoodList: function() {
 
   },
-
+  // 点击商品类别
+  tabClick: function(e) {
+    let offset = e.currentTarget.offsetLeft
+    if (offset > 150) {
+      offset = offset - 150
+    } else {
+      offset = 0
+    }
+    this.setData({
+      activeCategoryId: e.currentTarget.id,
+      curPage: 1,
+      cateScrollTop: offset
+    })
+    this.getGoodList(this.data.activeCategoryId)
+  },
+  // 点击轮播图
   tapBanner: function(e) {
     if (e.currentTarget.dataset.id != 0) {
       wx.navigateTo({
@@ -99,11 +118,13 @@ Page({
       })
     }
   },
+  // 记录当前轮播页
   swiperChange: function(e) {
     this.setData({
       swiperCurrent: e.detail.current
     })
   },
+  // 商品详情
   toDetail: function(e) {
     wx.navigateTo({
       url: 'pages/goods-details/index?id=' + e.currentTarget.dataset.id
@@ -134,6 +155,12 @@ Page({
       inputVal: e.detail.value
     })
   },
-
+  // 刷新
+  onPullDownRefresh: function() {
+    this.setData({
+      curPage: 1
+    })
+    this.getGoodList(this.data.activeCategoryId)
+  }
   
 })
