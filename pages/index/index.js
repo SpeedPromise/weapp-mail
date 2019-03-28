@@ -114,7 +114,7 @@ Page({
   tapBanner: function(e) {
     if (e.currentTarget.dataset.id != 0) {
       wx.navigateTo({
-        url: 'pages/goods-details/index?id=' + e.currentTarget.dataset.id
+        url: '/pages/goods-details/index?id=' + e.currentTarget.dataset.id
       })
     }
   },
@@ -127,7 +127,7 @@ Page({
   // 商品详情
   toDetail: function(e) {
     wx.navigateTo({
-      url: 'pages/goods-details/index?id=' + e.currentTarget.dataset.id
+      url: '/pages/goods-details/index?id=' + e.currentTarget.dataset.id
     })
   },
 

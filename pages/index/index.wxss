@@ -102,7 +102,7 @@ category-colunm {
   white-space: nowrap;
   overflow: hidden;
   font-size: 24rpx;
-  padding: 24rpx 0 0rpx 0;
+  padding: 24rpx 0 0 0;
   color:#000;
   margin-left: 24rpx;
 }
@@ -113,4 +113,11 @@ category-colunm {
   padding: 24rpx 0;
   color:#e64340;
   margin-left: 24rpx;
+}
+
+.no-more-goods {
+  text-align: center;
+  font-size: 24rpx;
+  padding-bottom: 48rpx;
+  color: #999
 }

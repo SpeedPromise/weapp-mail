@@ -64,4 +64,39 @@
       </view>
     </view>
   </view>
+
+  <view class='space'></view>
+  <view class="weui-loadmore weui-loadmore_line" wx:if="{{goodsRecommend.length > 0 && activeCategoryId === 0}}">
+    <view class='weui-loadmore__tips weui-loadmore__tips_in-line'>新品首发</view>
+  </view>
+  <view class='goods-container' wx:if="{{goodsRecommend.length > 0 && activeCategoryId === 0}}">
+    <view class='goods-box' wx:for-items="{{goodsRecommend}}" wx:key="unique" bindtap='toDetail' data-id="{{item.id}}">
+      <view class='img-box'>
+        <image src="{{item.pic}}" class='image' mode='aspectFill' lazy-load='true'></image>
+      </view>
+      <view class='goods-title'>{{item.name}}</view>
+      <view style='display:flex;'>
+        <view class='goods-price'>¥ {{item.minPrice}}</view>
+        <view wx:if="{{item.originalPrice && item.originalPrice > 0}}" class='goods-price' style='color:#aaa;text-decoration:line-through'>¥ {{item.originalPrice}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class='space'></view>
+  <view class="weui-loadmore weui-loadmore_line" wx:if="{{goodsRecommend.length > 0 && activeCategoryId === 0}}">
+    <view class='weui-loadmore__tips weui-loadmore__tips_in-line'>当季热销</view>
+  </view>
+  <view class='goods-container' wx:if="{{goodsRecommend.length > 0 && activeCategoryId === 0}}">
+    <view class='goods-box' wx:for-items="{{goodsRecommend}}" wx:key="unique" bindtap='toDetail' data-id="{{item.id}}">
+      <view class='img-box'>
+        <image src="{{item.pic}}" class='image' mode='aspectFill' lazy-load='true'></image>
+      </view>
+      <view class='goods-title'>{{item.name}}</view>
+      <view style='display:flex;'>
+        <view class='goods-price'>¥ {{item.minPrice}}</view>
+        <view wx:if="{{item.originalPrice && item.originalPrice > 0}}" class='goods-price' style='color:#aaa;text-decoration:line-through'>¥ {{item.originalPrice}}</view>
+      </view>
+    </view>
+  </view>
+  <view hidden="{{loadingMore ? true : false}}" class="no-more-goods">没有更多了</view>
 </view>
