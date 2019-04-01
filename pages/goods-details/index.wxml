@@ -18,7 +18,20 @@
   <view class='swiper-container' wx:if="{{goodsDetail.basicInfo.videoId}}">
     <video src="{{videoMp4Src}}" autoplay='true' loop='true' style='width:100%;'></video>
   </view>
-
+  <view class='goods-info'>
+    <view class='goods-title'>{{goodsDetail.basicInfo.name}}</view>
+    <view class='goods-share' wx:if="{{goodsDetail.basicInfo.commissionType == 1}}">分享有赏，好友下单后可得 {{goodsDetail.basicInfo.commission}} 积分奖励</view>
+    <view class='goods-share' wx:if="{{goodsDetail.basicInfo.commissionType == 2}}">分享有赏，好友下单后可得 {{goodsDetail.basicInfo.commission}}元 现金奖励</view>
+    <view class='goods-price'>¥ {{price}}</view>
+    <view class='goods-number'>销量 {{goodsDetail.basicInfo.numberOrders}}</view>
+    <view class='goods-number'>好评数 {{goodsDetail.basicInfo.numberGoodReputation}}</view>
+    <view class='goods-share-btn'>
+      <image src='../../images/award.png'></image>
+      <button open-type='share'>分享</button>
+      <text>分享有赏</text>
+    </view>
+  </view>
+  <view wx:if="{{hasMoreSelect}}" class='row-arrow' bindtap='bindSpecification'>{{specification}}</view>
 
   <view class='footer-box'>
     <view class='contact'>

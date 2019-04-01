@@ -12,9 +12,8 @@ Page({
     goodsDetail: {},
     swiperCurrent: 0,
 
-    selectSize: '选择：',
-    selectSizePrice: 0,
-    selectScoreToPay: 0,
+    price: 0,
+    scoreToPay: 0,
     shopnum: 0,
 
   },
@@ -42,49 +41,44 @@ Page({
     console.log(goodsDetailRes)
 
     if (goodsDetailRes.code === 0) {
-      var selectSizeTemp = ''
-      if (goodsDetailRes.data.properties) {
-        for (let i = 0; i < goodsDetailRes.data.properties.length; i++) {
-          selectSizeTemp = selectSizeTemp + ' ' + goodsDetailRes.data.properties[i].name
-        }
-        that.setData({
 
-          selectSize: that.data.selectSize + selectSizeTemp,
-          selectSizePrice: goodsDetailRes.data.basicInfo.miinPrice,
-          selectScoreToPay: goodsDetailRes.data.basicInfo.minScore
-        })
-      }
-      if (goodsDetailRes.data.basicInfo.pingtuan) {
-
-      }
       that.setData({
+        price: goodsDetailRes.data.basicInfo.minPrice,
+        scoreToPay: goodsDetailRes.data.basicInfo.minScore,
         goodsDetail: goodsDetailRes.data
       })
-      
-      if (goodsDetailRes.data.basicInfo.videoId) {
-        
-      }
+    
+    if (goodsDetailRes.data.basicInfo.pingtuan) {
 
-      WxParse.wxParse('article', 'html', goodsDetailRes.data.content, that, 5)
     }
-  },
 
-  // 获取视频连接
-  getVideoSrc: function(videoId) {
-    var that = this
-    WXAPI.videoDetail(videoId).then(function(res) {
-      if (res.code === 0) {
-        that.setData({
-          videoMp4Src: res.data.fdMp4
-        })
-      }
-    })
-  },
-  toAddShopCart: function(){
+    if (goodsDetailRes.data.basicInfo.videoId) {
 
-  },
-  toBuy() {
+    }
 
-  },
+    WxParse.wxParse('article', 'html', goodsDetailRes.data.content, that, 5)
+  }
+},
+
+// 获取视频连接
+getVideoSrc: function(videoId) {
+  var that = this
+  WXAPI.videoDetail(videoId).then(function(res) {
+    if (res.code === 0) {
+      that.setData({
+        videoMp4Src: res.data.fdMp4
+      })
+    }
+  })
+},
+toAddShopCart: function() {
+
+},
+toBuy() {
+
+},
+bindSpecification: function() {
+
+}
 
 })
