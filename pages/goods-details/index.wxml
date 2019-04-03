@@ -31,21 +31,69 @@
       <text>分享有赏</text>
     </view>
   </view>
-  <view wx:if="{{hasMoreSelect}}" class='row-arrow' bindtap='bindSpecification'>{{specification}}</view>
 
-  <view class='footer-box'>
-    <view class='contact'>
-      <contact-button style='opacity:0;position:absolute;' type='default-dark' session-from='weapp' size='27'></contact-button>
-      <view style='position:absolute;bottom:10rpx;'>客服</view>
+  <view class='goods-des'>
+    <view class='label-title'>商品详情</view>
+    <view class='goods-text'>
+      <template is='wxParse' data="{{wxParseData:article.nodes}}" />
     </view>
-    <view class='shop-cart' bindtap='goShopCart'>
-      <view class='shop-num'>({{shopnum}})</view>
-      <view style='position:absolute;bottom:10rpx'>购物车</view>
+  </view>
+
+  <view class='goods-des'>
+    <view class='label-title'>评价
+      <text style='color:red '>（{{reputation.length || 0}}）</text>
+    </view>
+    <view class='goods-text' wx:for="{{reputation}}" wx:key="id">
+      <view>
+        <image src='{{item.user.avatarUrl}}'></image>
+        <view>{{item.goods.goodReputationStr}}</view>
+      </view>
+      <view>
+        <view>{{item.goods.goodReputaionRemark}}</view>
+        <view>{{item.goods.dataReputation}} {{item.goods.property}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class='footer-box '>
+    <view class='contact '>
+      <contact-button style='opacity:0;position:absolute; ' type='default-dark ' session-from='weapp ' size='27 '></contact-button>
+      <view style='position:absolute;bottom:10rpx; '>客服</view>
+    </view>
+    <view class='shop-cart ' bindtap='goShopCart '>
+      <view class='shop-num '>({{shopnum}})</view>
+      <view style='position:absolute;bottom:10rpx '>购物车</view>
     </view>
 
-    <view class='join-shop-cart' bindtap='toAddShopCart'>加入购物车</view>
-    <view class='buy-now' bindtap='toBuy'>立即购买</view>
+    <view class='btn ' style='background-color: #ff6850;' bindtap='toAddShopCart'>加入购物车</view>
+    <view class='btn ' style='background-color: #e64340;' bindtap='toBuy'>立即购买</view>
+  </view>
 
-
+  <view class='show-popup' hidden="{{hideShopPopup}}" catchtouchmove='true'>
+    <view class='popup-mask' bindtap='closePopupTap'></view>
+    <view class='popup-contents'>
+      <view class='popup-goods-info'>
+        <view class='popup-img-box'>
+          <image src='{{goodsDetail.basicInfo.pic}}'></image>
+        </view>
+        <view>
+          <view class='popup-goods-title'>{{goodsDetail.basicInfo.name}}</view>
+          <view class='popup-goods-price'>{{price}}</view>
+        </view>
+        <view class='popup-goods-close' bindtap='closePopupTap'></view>
+      </view>
+      <view class='num-box'>
+        <view class='num-label'>购买数量</view>
+        <view class='num-contents'>
+          <view class="num-sub {{buyNum == buyNumMin ? 'limit' : ''}}" bindtap="numSubTap">-</view>
+          <view class='num-input'>
+            <input type='number' value='{{buyNum}}' disabled/>
+          </view>
+          <view class="num-add {{buyNum == buyNumMax ? 'limit' : ''}}" bindtap="numAddTap">+</view>
+        </view>
+      </view>
+      <view class='popup-btn' data-shopType="{{shopType}}" wx:if="{{shopType == 1}}" bindtap='addShopCart'>加入购物车</view>
+      <view class='popup-btn' data-shopType="{{shopType}}" wx:if="{{shopType == 2}}" bindtap='buyNow'>立即购买</view>
+    </view>
   </view>
 </view>
