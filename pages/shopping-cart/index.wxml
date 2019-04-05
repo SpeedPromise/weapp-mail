@@ -5,7 +5,7 @@
 
 <template name='goods-list'>
   <view class='goods-list' wx:for="{{list}}" wx:key="{{index}}">
-    <view class="selected {{item.active? 'active' : ''}}" bindtap='selectTap' bindtouchstart="touchS" bindtouchmove="touchM" bindtouchend="touchE" data-index="{{index}}" style="margin-left: -{{item.left}}px">
+    <view class="selected {{item.active? 'active' : ''}}" bindtap='selectTap' bindtouchstart="touchS" bindtouchend="touchE" data-index="{{index}}" style="margin-left: -{{item.left}}px">
       <view class='goods-info'>
         <view class='img-box'>
           <image class='img' src="{{item.pic}}" />
@@ -13,17 +13,15 @@
         <view class='text-box'>
           <view class='goods-title'>{{item.name}}</view>
           <view class='goods-label'>{{item.label}}</view>
-          <view class='goods-price'>{{itme.price}}</view>
+          <view class='goods-price'>¥{{item.price}}</view>
           <view class='num-contents'>
-            <view class="num-sub {{item.number == buyNumMin ? 'limit' : ''}}" bindtap="numSubTap">-</view>
-            <view class='num-input'>
-              <input type='number' value='{{item.number}}' disabled/>
-            </view>
-            <view class="num-add {{item.number == buyNumMax ? 'limit' : ''}}" bindtap="numAddTap">+</view>
+            <view class="num-sub {{item.number == item.buyNumMin ? 'limit' : ''}}" catchtap="numSubTap" data-index='{{index}}'>-</view>
+            <input type='number' value='{{item.buyNum}}' disabled/>
+            <view class="num-add {{item.number == item.buyNumMax ? 'limit' : ''}}" catchtap="numAddTap" data-index='{{index}}'>+</view>
           </view>
         </view>
       </view>
-      <view class='del-btn' data-index="{{index}}" catchtap='delItem'>删除</view>
+      <view class='del-btn' data-index="{{index}}" catchtap='delItem' data-index='{{index}}'>删除</view>
     </view>
   </view>
   <view class='settlement'>
@@ -32,7 +30,7 @@
       <view class='total'>合计：¥{{totalPrice}}</view>
       <view class='total-detail'>总额:¥{{totalPrice}} 立减:¥{{offer}}</view>
     </view>
-    <view class="btn {{noSelected ? 'noSelected' : ''}} " bindtap='toPay'>去结算</view>
+    <view class="btn" bindtap='toPay'>去结算</view>
   </view>
 </template>
 

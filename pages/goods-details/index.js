@@ -23,7 +23,7 @@ Page({
     shopNum: 0,
     buyNum: 1,    // 购买数量
     buyNumMin: 1,
-    buyNumMax: 0,
+    buyNumMax: 1,
   },
 
   async onLoad(e) {
@@ -54,11 +54,7 @@ Page({
   async getGoodsDetail(goodsId) {
     const that = this
     const goodsDetailRes = await WXAPI.goodsDetail(goodsId)
-
-    console.log(goodsDetailRes)
-
     if (goodsDetailRes.code === 0) {
-
       that.setData({
         price: goodsDetailRes.data.basicInfo.minPrice,
         scoreToPay: goodsDetailRes.data.basicInfo.minScore,
@@ -160,6 +156,7 @@ Page({
     shopCartMap.score = this.data.score
     shopCartMap.buyNum = this.data.buyNum
     shopCartMap.weight = goodsDetail.basicInfo.weight
+    shopCartMap.buyNumMax = this.data.buyNumMax
 
     let shopCartInfo = this.data.shopCartInfo
     if (!shopCartInfo.shopNum) {
@@ -202,7 +199,6 @@ Page({
       icon: 'success',
       duration: 1500
     })
-    console.log(shopCartInfo)
   },
 
   buyNow: function(){

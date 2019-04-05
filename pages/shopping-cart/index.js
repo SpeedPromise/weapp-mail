@@ -7,8 +7,8 @@ Page({
   data: {
     goodsList: {
       list: [],
-      allSelected: true,
-      noSelected: false,
+      selected: 0,
+      allSelected: false,
       totalPrice: 0.00,
       offer: 0.00,
     },
@@ -45,6 +45,9 @@ Page({
     if (shopCartInfo && shopCartInfo.shopList){
       shopList = shopCartInfo.shopList
     }
+    for (var i = 0; i < shopList.length; i++) {
+      shopList[i].active = false
+    }
     this.data.goodsList.list = shopList;
     this.setGoodsList(shopList);
   },
@@ -57,27 +60,109 @@ Page({
   },
 
   setGoodsList: function(list){
-    this.setData({
-      goodsList: {
-        list: list
+    var totalPrice = 0
+    var selected = 0
+    var allSelected = false
+    for (var i = 0; i < list.length; i++) {
+      if (list[i].active) {
+        totalPrice += parseFloat(list[i].price) * list[i].buyNum
+        selected++
       }
-    })
-  },
-
-  numSubTap: function(){
-
-  },
-  numAddTap: function(){
-
-  },
-
-  bindAllSelected: function(){
-    let allSelected = this.data.goodsList.allSelected ? false : true
+    }
+    if (selected == list.length) {allSelected = true}
+    totalPrice = parseFloat(totalPrice.toFixed(2))
     this.setData({
       goodsList: {
+        list: list,
+        totalPrice: totalPrice,
+        selected: selected,
         allSelected: allSelected
       }
     })
+    var shopCartInfo = {}
+    shopCartInfo.shopList = list
+    shopCartInfo.shopNum = list.reduce((pre, cur) => {
+      return cur.buyNum + pre
+    }, 0)
+    wx.setStorage({
+      key: "shopCartInfo",
+      data: shopCartInfo
+    })
+  },
+
+  touchS: function(e) {
+    if (e.touches.length == 1) {
+      this.setData({
+        startX: e.touches[0].clientX 
+      })
+    }
+  },
+  touchE: function(e) {
+    var index = e.currentTarget.dataset.index
+    if (e.changedTouches.length == 1) {
+      var endX = e.changedTouches[0].clientX
+      var d = this.data.startX - endX
+      var delBtnWidth = this.data.delBtnWidth
+      var left = d > delBtnWidth / 2 ? delBtnWidth : 0
+      var list = this.data.goodsList.list
+      
+      if (index !== "" && index != null){
+        list[parseInt(index)].left = left
+        this.setData({
+          goodsList: {
+            list: list
+          }
+        })
+      }
+    }
+  },
+
+  delItem: function(e) {
+    var index = e.currentTarget.dataset.index
+    var list = this.data.goodsList.list
+    list.splice(index, 1)
+    this.setGoodsList(list)
+  },
+
+  numSubTap: function(e){
+    var index = e.currentTarget.dataset.index
+    var list = this.data.goodsList.list
+    if (index !== '' && index != null) {
+      list[parseInt(index)].buyNum--
+    }
+    this.setGoodsList(list)
+  },
+  numAddTap: function(e){
+    var index = e.currentTarget.dataset.index
+    var list = this.data.goodsList.list
+    if (index !== '' && index != null) {
+      list[parseInt(index)].buyNum++
+    }
+    this.setGoodsList(list)
+  },
+
+  selectTap: function(e) {
+    var index = e.currentTarget.dataset.index
+    var list = this.data.goodsList.list
+    if (index !== "" && index != null) {
+      list[parseInt(index)].active = !list[parseInt(index)].active
+      this.setGoodsList(list)
+    }
+  },
+
+  bindAllSelected: function(){
+    var list = this.data.goodsList.list
+    var allSelected = this.data.goodsList.allSelected
+    if (allSelected){
+      for (var i = 0; i < list.length; i++) {
+        list[i].active = false
+      }
+    } else {
+      for (var i = 0; i < list.length; i++) {
+        list[i].active = true
+      }
+    }
+    this.setGoodsList(list)
   },
 
   toPay: function(){
