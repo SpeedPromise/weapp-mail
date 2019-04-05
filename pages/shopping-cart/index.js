@@ -5,62 +5,84 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    goodsList: {
+      list: [],
+      allSelected: true,
+      noSelected: false,
+      totalPrice: 0.00,
+      offer: 0.00,
+    },
+    delBtnWidth: 120,
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
+  getWidth: function(w){
+    var width = 0;
+    try {
+      // 以750px设计标准自适应屏幕
+      var res = wx.getSystemInfoSync().windowWidth;
+      var scale = (750 / 2) / (w / 2);
+      width = Math.floor(res / scale)
+      return width
+    } catch (e) {
+      return false
+    }
+  },
+  initWidth: function(){
+    var delBtnWidth = this.getWidth(this.data.delBtnWidth)
+    this.setData({
+      delBtnWidth: delBtnWidth
+    })
+  },
+
   onLoad: function (options) {
-
+    this.initWidth()
+    
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
   onShow: function () {
+    var shopList = []
+    var shopCartInfo = wx.getStorageSync('shopCartInfo')
+    if (shopCartInfo && shopCartInfo.shopList){
+      shopList = shopCartInfo.shopList
+    }
+    this.data.goodsList.list = shopList;
+    this.setGoodsList(shopList);
+  },
+
+
+  jumpIndex: function(){
+    wx.switchTab({
+      url: '/pages/index/index',
+    })
+  },
+
+  setGoodsList: function(list){
+    this.setData({
+      goodsList: {
+        list: list
+      }
+    })
+  },
+
+  numSubTap: function(){
+
+  },
+  numAddTap: function(){
 
   },
 
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
+  bindAllSelected: function(){
+    let allSelected = this.data.goodsList.allSelected ? false : true
+    this.setData({
+      goodsList: {
+        allSelected: allSelected
+      }
+    })
+  },
+
+  toPay: function(){
 
   },
 
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
-  }
+ 
 })

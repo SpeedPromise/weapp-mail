@@ -9,7 +9,8 @@ Page({
     interval: 3500,
     duration: 1000,
 
-    goodsDetail: {},
+    goodsDetail: {},   //商品信息
+    shopCartInfo: {},  // 购物车信息
     swiperCurrent: 0,
 
     hasMoreSelect: false,
@@ -19,14 +20,24 @@ Page({
 
     price: 0,
     scoreToPay: 0,
-    shopnum: 0,
-    buyNum: 0,
+    shopNum: 0,
+    buyNum: 1,    // 购买数量
+    buyNumMin: 1,
+    buyNumMax: 0,
   },
 
   async onLoad(e) {
     this.data.goodsId = e.id
     const that = this
-
+    wx.getStorage({
+      key: 'shopCartInfo',
+      success: function(res) {
+        that.setData({
+          shopCartInfo: res.data,
+          shopNum: res.data.shopNum
+        })
+      },
+    })
     this.reputation(e.id)
   },
 
@@ -51,7 +62,8 @@ Page({
       that.setData({
         price: goodsDetailRes.data.basicInfo.minPrice,
         scoreToPay: goodsDetailRes.data.basicInfo.minScore,
-        goodsDetail: goodsDetailRes.data
+        goodsDetail: goodsDetailRes.data,
+        buyNumMax: goodsDetailRes.data.basicInfo.stores
       })
 
       if (goodsDetailRes.data.basicInfo.pingtuan) {
@@ -79,7 +91,7 @@ Page({
   },
   goShopCart: function() {
     wx.reLaunch({
-      url: '/pages/shopping-cart/index',
+      url: '/pages/shopping-cart/index'
     })
   },
   // 按钮事件
@@ -121,15 +133,78 @@ Page({
   },
 
   numSubTap: function(){
-
+    if (this.data.buyNum > this.data.buyNumMin) {
+      var curNum = this.data.buyNum - 1
+      this.setData({
+        buyNum: curNum
+      })
+    }
   },
   numAddTap: function(){
-
+    
+    if (this.data.buyNum < this.data.buyNumMax) {
+      var curNum = this.data.buyNum + 1
+      this.setData({
+        buyNum: curNum
+      })
+    }
   },
 
+  buildShopCartInfo: function(){
+    var shopCartMap = {};
+    let goodsDetail = this.data.goodsDetail
+    shopCartMap.goodsId = goodsDetail.basicInfo.id
+    shopCartMap.name = goodsDetail.basicInfo.name
+    shopCartMap.pic = goodsDetail.basicInfo.pic
+    shopCartMap.price = this.data.price
+    shopCartMap.score = this.data.score
+    shopCartMap.buyNum = this.data.buyNum
+    shopCartMap.weight = goodsDetail.basicInfo.weight
+
+    let shopCartInfo = this.data.shopCartInfo
+    if (!shopCartInfo.shopNum) {
+      shopCartInfo.shopNum = 0;
+    }
+    if (!shopCartInfo.shopList) {
+      shopCartInfo.shopList = []
+    }
+    var hasSameGoodsIndex = -1
+    for (var i = 0; i < shopCartInfo.shopList.length; i++) {
+      var tmp = shopCartInfo.shopList[i]
+      if (tmp.goodsId == shopCartMap.goodsId) {
+        hasSameGoodsIndex = i
+        shopCartMap.buyNum += tmp.buyNum
+        break
+      }
+    }
+
+    shopCartInfo.shopNum += this.data.buyNum
+    if (hasSameGoodsIndex > -1) {
+      shopCartInfo.shopList.splice(hasSameGoodsIndex, 1, shopCartMap)
+    } else {
+      shopCartInfo.shopList.push(shopCartMap)
+    }
+    return shopCartInfo
+  },
   addShopCart: function(){
-
+    let shopCartInfo = this.buildShopCartInfo()
+    this.setData({
+      shopCartInfo: shopCartInfo,
+      shopNum: shopCartInfo.shopNum
+    })
+    wx.setStorage({
+      key: 'shopCartInfo',
+      data: shopCartInfo,
+    })
+    this.closePopupTap()
+    wx.showToast({
+      title: '加入购物车成功',
+      icon: 'success',
+      duration: 1500
+    })
+    console.log(shopCartInfo)
   },
+
   buyNow: function(){
 
   },

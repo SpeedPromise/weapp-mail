@@ -1,3 +1,41 @@
-<view class='container'>            >
-  <template ></template>
+<template name='empty'>
+  <view class='title-box'>购物车空空如也～</view>
+  <view class='jump-index' bindtap='jumpIndex'>去逛逛</view>
+</template>
+
+<template name='goods-list'>
+  <view class='goods-list' wx:for="{{list}}" wx:key="{{index}}">
+    <view class="selected {{item.active? 'active' : ''}}" bindtap='selectTap' bindtouchstart="touchS" bindtouchmove="touchM" bindtouchend="touchE" data-index="{{index}}" style="margin-left: -{{item.left}}px">
+      <view class='goods-info'>
+        <view class='img-box'>
+          <image class='img' src="{{item.pic}}" />
+        </view>
+        <view class='text-box'>
+          <view class='goods-title'>{{item.name}}</view>
+          <view class='goods-label'>{{item.label}}</view>
+          <view class='goods-price'>{{itme.price}}</view>
+          <view class='num-contents'>
+            <view class="num-sub {{item.number == buyNumMin ? 'limit' : ''}}" bindtap="numSubTap">-</view>
+            <view class='num-input'>
+              <input type='number' value='{{item.number}}' disabled/>
+            </view>
+            <view class="num-add {{item.number == buyNumMax ? 'limit' : ''}}" bindtap="numAddTap">+</view>
+          </view>
+        </view>
+      </view>
+      <view class='del-btn' data-index="{{index}}" catchtap='delItem'>删除</view>
+    </view>
+  </view>
+  <view class='settlement'>
+    <view class="all-selected {{allSelected ? 'active' : ''}}" bindtap="bindAllSelected">全选</view>
+    <view class='price'>
+      <view class='total'>合计：¥{{totalPrice}}</view>
+      <view class='total-detail'>总额:¥{{totalPrice}} 立减:¥{{offer}}</view>
+    </view>
+    <view class="btn {{noSelected ? 'noSelected' : ''}} " bindtap='toPay'>去结算</view>
+  </view>
+</template>
+
+<view class='container'>
+  <template is="{{goodsList.list.length > 0 ? 'goods-list' : 'empty'}}" data="{{...goodsList}}"></template>
 </view>

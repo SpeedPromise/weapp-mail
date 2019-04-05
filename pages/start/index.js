@@ -1,4 +1,4 @@
-// pages/sign/index.js
+// pages/start/index.js
 Page({
 
   /**
