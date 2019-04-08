@@ -108,11 +108,7 @@ Page({
       
       if (index !== "" && index != null){
         list[parseInt(index)].left = left
-        this.setData({
-          goodsList: {
-            list: list
-          }
-        })
+        this.setGoodsList(list)
       }
     }
   },
@@ -127,7 +123,7 @@ Page({
   numSubTap: function(e){
     var index = e.currentTarget.dataset.index
     var list = this.data.goodsList.list
-    if (index !== '' && index != null) {
+    if (list[parseInt(index)].buyNum > 1) {
       list[parseInt(index)].buyNum--
     }
     this.setGoodsList(list)
@@ -135,7 +131,7 @@ Page({
   numAddTap: function(e){
     var index = e.currentTarget.dataset.index
     var list = this.data.goodsList.list
-    if (index !== '' && index != null) {
+    if (list[parseInt(index)].buyNum < list[parseInt(index)].buyNumMax) {
       list[parseInt(index)].buyNum++
     }
     this.setGoodsList(list)

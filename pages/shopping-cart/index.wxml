@@ -15,9 +15,9 @@
           <view class='goods-label'>{{item.label}}</view>
           <view class='goods-price'>¥{{item.price}}</view>
           <view class='num-contents'>
-            <view class="num-sub {{item.number == item.buyNumMin ? 'limit' : ''}}" catchtap="numSubTap" data-index='{{index}}'>-</view>
+            <view class="num-sub {{item.buyNum == item.buyNumMin ? 'limit' : ''}}" catchtap="numSubTap" data-index='{{index}}'>-</view>
             <input type='number' value='{{item.buyNum}}' disabled/>
-            <view class="num-add {{item.number == item.buyNumMax ? 'limit' : ''}}" catchtap="numAddTap" data-index='{{index}}'>+</view>
+            <view class="num-add {{item.buyNum == item.buyNumMax ? 'limit' : ''}}" catchtap="numAddTap" data-index='{{index}}'>+</view>
           </view>
         </view>
       </view>

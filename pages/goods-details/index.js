@@ -1,6 +1,7 @@
 // pages/goods-detail/index.js
 const WXAPI = require('../../wxapi/main.js')
 const WxParse = require('../../wxParse/wxParse.js')
+// 使小程序支持async-await
 const regeneratorRuntime = require('../../utils/runtime.js')
 const app = getApp();
 
@@ -9,19 +10,19 @@ Page({
     interval: 3500,
     duration: 1000,
 
-    goodsDetail: {},   //商品信息
-    shopCartInfo: {},  // 购物车信息
+    goodsDetail: {}, //商品信息
+    shopCartInfo: {}, // 购物车信息
     swiperCurrent: 0,
 
     hasMoreSelect: false,
     hideShopPopup: true,
     canSubmit: false, // 选规格后是否允许加入购物车
-    shopType: 1,  // 1加入购物车或 2立即购买
+    shopType: 1, // 1加入购物车或 2立即购买
 
     price: 0,
     scoreToPay: 0,
     shopNum: 0,
-    buyNum: 1,    // 购买数量
+    buyNum: 1, // 购买数量
     buyNumMin: 1,
     buyNumMax: 1,
   },
@@ -106,12 +107,12 @@ Page({
   // 规格选择框
   bindGuiGeTap: function() {
     this.setData({
-      hideShopPopup:false
+      hideShopPopup: false
     })
   },
   closePopupTap: function() {
     this.setData({
-      hideShopPopup:true
+      hideShopPopup: true
     })
   },
 
@@ -119,8 +120,8 @@ Page({
     var that = this
     WXAPI.goodsReputation({
       goodsId: goodsId
-    }).then(function(res){
-      if(res.code == 0){
+    }).then(function(res) {
+      if (res.code == 0) {
         that.setData({
           reputation: res.data
         })
@@ -128,7 +129,7 @@ Page({
     })
   },
 
-  numSubTap: function(){
+  numSubTap: function() {
     if (this.data.buyNum > this.data.buyNumMin) {
       var curNum = this.data.buyNum - 1
       this.setData({
@@ -136,8 +137,8 @@ Page({
       })
     }
   },
-  numAddTap: function(){
-    
+  numAddTap: function() {
+
     if (this.data.buyNum < this.data.buyNumMax) {
       var curNum = this.data.buyNum + 1
       this.setData({
@@ -146,17 +147,19 @@ Page({
     }
   },
 
-  buildShopCartInfo: function(){
+  buildShopCartInfo: function() {
     var shopCartMap = {};
     let goodsDetail = this.data.goodsDetail
-    shopCartMap.goodsId = goodsDetail.basicInfo.id
-    shopCartMap.name = goodsDetail.basicInfo.name
-    shopCartMap.pic = goodsDetail.basicInfo.pic
-    shopCartMap.price = this.data.price
-    shopCartMap.score = this.data.score
-    shopCartMap.buyNum = this.data.buyNum
-    shopCartMap.weight = goodsDetail.basicInfo.weight
-    shopCartMap.buyNumMax = this.data.buyNumMax
+    shopCartMap = {
+      goodsId: goodsDetail.basicInfo.id,
+      name: goodsDetail.basicInfo.name,
+      pic: goodsDetail.basicInfo.pic,
+      price: this.data.price,
+      score: this.data.score,
+      buyNum: this.data.buyNum,
+      weight: goodsDetail.basicInfo.weight,
+      buyNumMax: this.data.buyNumMax
+    }
 
     let shopCartInfo = this.data.shopCartInfo
     if (!shopCartInfo.shopNum) {
@@ -183,7 +186,7 @@ Page({
     }
     return shopCartInfo
   },
-  addShopCart: function(){
+  addShopCart: function() {
     let shopCartInfo = this.buildShopCartInfo()
     this.setData({
       shopCartInfo: shopCartInfo,
@@ -201,7 +204,7 @@ Page({
     })
   },
 
-  buyNow: function(){
+  buyNow: function() {
 
   },
 })

@@ -1,1 +1,100 @@
 /* pages/category/index.wxss */
+
+page {
+  height: 100%;
+  overflow: hidden;
+}
+
+.container {
+  height: 100%;
+  background-color: white;
+  display: flex;
+  font-size: 28rpx;
+  color: #000;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.left {
+  width: 180rpx;
+  height: 100%;
+  flex-shrink: 0;
+}
+
+.left ::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  color: transparent;
+}
+
+.right {
+  height: 100%;
+  flex-grow: 1;
+  box-sizing: border-box;
+}
+
+.right ::-webkit-scrollbar
+{
+width: 5px;
+height: 5px;
+}
+/*定义滚动条轨道 内阴影+圆角*/
+.right ::-webkit-scrollbar-track
+{
+-webkit-box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+border-radius: 10px;
+}
+/*定义滑块 内阴影+圆角*/
+.right ::-webkit-scrollbar-thumb
+{
+border-radius: 10px;
+-webkit-box-shadow: inset 0 0 10px rgba(0,0,0,.3);
+box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+background-color: #f23030;
+}
+
+.category-item {
+  width: 100%;
+  background-color: #fafafa;
+  height: 100rpx;
+  line-height: 100rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.category-item.active {
+  background-color: white;
+  border-left: 2px solid #f23030;
+  color: #f23030;
+}
+.goods-container{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.goods-item {
+  width: 33%;
+  display: flex;
+  padding: 10rpx 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.img {
+  width: 120rpx;
+  height: 120rpx;
+  flex-shrink: 0;
+}
+.goods-item .name{
+  margin-top: 10rpx;
+  width: 80%;
+  height: 30rpx;
+  line-height: 30rpx;
+  font-size: 26rpx;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}

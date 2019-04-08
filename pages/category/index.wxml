@@ -1,2 +1,28 @@
 <!--pages/category/index.wxml-->
-<text>pages/category/index.wxml</text>
+<view style='width:100%;height:1px;background-color:#ddd;'></view>
+<view class='container'>
+
+  <scroll-view class='left' scroll-y='true'>
+    <block wx:for='{{categories}}' wx:key='id'>
+      <view class="category-item {{id == item.id? 'active' : ''}}" data-id="{{item.id}}" id='item.id' bindtap='onItemClick'>
+        <text>{{item.name}}</text>
+      </view>
+    </block>
+
+  </scroll-view>
+
+  <scroll-view class='right' scroll-y='true'>
+    <view class="weui-loadmore weui-loadmore_line">
+      <view class='weui-loadmore__tips weui-loadmore__tips_in-line'>HUAWEI P系列</view>
+    </view>
+    <block wx:for="{{goodsList}}" wx:key='id'>
+      <view wx:if='{{item.id == curId}}' class='goods-container'>
+        <navigator class='goods-item' url='' wx:for='{{item.list}}' wx:for-item='goods' wx:key='id'>
+
+          <image class='img' mode='aspectFill' lazy-load="true" src='{{goods.pic}}'></image>
+          <view class='name'>{{goods.name}}</view>
+        </navigator>
+      </view>
+    </block>
+  </scroll-view>
+</view>
